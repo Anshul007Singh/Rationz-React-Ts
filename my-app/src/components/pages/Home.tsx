@@ -4,7 +4,7 @@ import Cart from './Cart';
 
 const Home:React.FC = ()=> {
 
-  const [itemData, setItemData] = useState([])
+  const [itemData, setItemData] = useState([]);
 
   useEffect(() => {
     fetch('https://dummyjson.com/products/')

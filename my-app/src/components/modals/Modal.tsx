@@ -20,7 +20,6 @@ const Modal: React.FC<ModalInterface> = ({ children,open=true,className }) => {
 
   }, [open]);
 
-  console.log(dialog,open)
 
   return createPortal(
     <dialog ref={dialog} className={className}>
