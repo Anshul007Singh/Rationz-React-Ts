@@ -3,34 +3,33 @@ import Header from './Header';
 import Login from './login/Login';
 import Home from './pages/Home';
 import { Routes, Route } from 'react-router-dom';
-import Cart from './pages/Cart';
 import CartContextDataProvider from './helpers/CartContextData';
-import UserContextProvider from './helpers/UserInputContext';
+import { AuthProvider } from './helpers/AuthContext';
 
 const Main:React.FC = (props)=> {
 
-const [isLogin, setIsLogin] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
+    const [isLoginUserName , setIsLoginUserName] = useState('')
 
-const isLoginHandler = (isLoginUser: boolean)=>{
-    console.log(isLoginUser);
-    setIsLogin(isLoginUser);
-}
+    const isLoginHandler = (isLoginUser: boolean)=>{
+        setIsLogin(isLoginUser);
+    }
 
-const isLogoutHandler=()=>{
-    setIsLogin(false)
-}
+    const isLogoutHandler=()=>{
+        setIsLogin(false)
+    }
+    const loggedUserName = (loggedUserName:string)=>{
+      setIsLoginUserName(loggedUserName)
+    }
 
   return (
     <div className="">
-      <UserContextProvider>
           <CartContextDataProvider>
-            <Routes>
-              <Route path='/home' element={<Home/>}></Route>
-            </Routes>
-            <Header age={0}/>
-            {isLogin ? <Home/> : <Login isLoginHandler = {isLoginHandler}/>}
+            <AuthProvider>
+            <Header isLogin={isLogin} onLogout = {isLogoutHandler} loggedUserName = {isLoginUserName}/>
+            {isLogin ? <Home/> : <Login isLoginHandler = {isLoginHandler} loggedUserName ={loggedUserName}/>}
+            </AuthProvider>
           </CartContextDataProvider>
-        </UserContextProvider>
     </div>
   );
 }

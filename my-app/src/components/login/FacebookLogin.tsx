@@ -8,7 +8,7 @@ interface facebookCredentials {
 }
 
 const Facebooklogin: React.FC<facebookCredentials> = ({ onLogin, onLogout }) => {
-  const appId = '211418512054189'; 
+  const appId = '1415082412449606'; 
   const handleLogin = (response: ReactFacebookLoginInfo) => {
     if (response) {
       onLogin(response);
@@ -30,3 +30,27 @@ const Facebooklogin: React.FC<facebookCredentials> = ({ onLogin, onLogout }) => 
 };
 
 export default Facebooklogin;
+
+
+
+{/* <script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '{your-app-id}',
+      cookie     : true,
+      xfbml      : true,
+      version    : '{api-version}'
+    });
+      
+    FB.AppEvents.logPageView();   
+      
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script> */}

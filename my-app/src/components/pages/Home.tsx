@@ -15,7 +15,7 @@ const Home:React.FC = ()=> {
     }, []);
       
   return (
-    <div className="container">
+    <div className="container mt-3">
       <div className='row d-flex justify-content-evenly'>
       {itemData.map((itemData,i)=>(
         <Card productData = {itemData} key={i}/>

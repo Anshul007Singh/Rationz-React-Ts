@@ -10,9 +10,9 @@ interface CartItem {
 
 interface CartContextProps {
   items: CartItem[];
-  userInput: string;
   addItem: (item: CartItem) => void;
   removeItem: (id: string | number) => void;
+  clearCart:()=> void;
 }
 
 
@@ -21,8 +21,9 @@ interface CartProviderProps {
 }
 
 type CartAction =
-  | { type: "add_item"; item: CartItem;}
-  | { type: "remove_item"; id: string | number };
+  | { type: "add_item"; item: CartItem}
+  | { type: "remove_item"; id: string | number }
+  |  { type: "clear_cart" }
 
 const cartReducer = (state: { items: CartItem[] }, action: CartAction) => {
   if (action.type === "add_item") {
@@ -62,6 +63,10 @@ const cartReducer = (state: { items: CartItem[] }, action: CartAction) => {
     }
     return {...state, items:updatedItems}
   }
+
+  if (action.type === "clear_cart") {
+    return { items: [] };
+  }
  
   return state;
 };
@@ -72,7 +77,6 @@ export const CartContext = createContext<CartContextProps | undefined>(
 
 const CartContextDataProvider: React.FC<CartProviderProps> = ({ children }) => {
 
-  const [userInput, setUserInput] = useState('');
   const [cart, cartActions] = useReducer(cartReducer, { items: [] });
 
   const addItem = (item: CartItem) => {
@@ -83,12 +87,15 @@ const CartContextDataProvider: React.FC<CartProviderProps> = ({ children }) => {
     cartActions({ type: "remove_item", id });
   };
 
+  const clearCart = ()=>{
+    cartActions({type:'clear_cart'});
+  }
+
   const contextValue: CartContextProps = {
     items: cart.items,
-    userInput:userInput,
     addItem,
     removeItem,
-
+    clearCart
   };
 
   return (

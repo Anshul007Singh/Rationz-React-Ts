@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 import FacebookLogin from './FacebookLogin';
 
 const Login = (props: any) => {
@@ -18,9 +18,9 @@ const Login = (props: any) => {
     const loginHandler = (e: { preventDefault: () => void; }) => {
         e.preventDefault()
         if(loginCredentials.userName === userName && loginCredentials.password === password){
-            setIsLogin(true)
-            props.isLoginHandler(isLogin)
-            console.log(isLogin)
+            setIsLogin(true);
+            props.isLoginHandler(isLogin);
+            props.loggedUserName('Anshul Singh')
         } else {
             alert('Invalid Email address or Password');
         }
@@ -31,15 +31,15 @@ const Login = (props: any) => {
         let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}$/
 
         if(emailRegx.test(userName) && passwordRegex.test(password)){
-            setIsvalid(true)
+            setIsvalid(true);
         } else {
-            setIsvalid(false)
+            setIsvalid(false);
         }
     }
 
     const onUserNameChangeHandler = (event:any)=>{
-        setUserName(event.target.value)
-        updateButtonStyle()
+        setUserName(event.target.value);
+        updateButtonStyle();
     }
 
     const onpasswordChangeHandler = (event:any)=>{
@@ -48,14 +48,18 @@ const Login = (props: any) => {
     }
 
     const handleGoogleLogin = useGoogleLogin({
-        onSuccess: () =>  props.isLoginHandler(true),
+        onSuccess: (res) =>  {
+            props.isLoginHandler(true);
+            console.log(res);
+        },
         flow: 'auth-code',
         onError: error => console.log(error),
       });
 
     const handleFacebookLogin = (response: any) => {
-        setIsLogin(true)
-        props.isLoginHandler(true)
+        setIsLogin(true);
+        props.isLoginHandler(true);
+        props.loggedUserName(response.name);
       };
 
 
@@ -84,6 +88,10 @@ const Login = (props: any) => {
         <div className='position-relative col-3 end-50'>
             <button className="btn btn-light mt-4 mb-4" onClick={handleGoogleLogin}>Google login</button>
              <FacebookLogin onLogin={handleFacebookLogin} onLogout={function (): void{} }></FacebookLogin>
+             {/* <GoogleLogin
+                onSuccess={credentialResponse => {console.log(credentialResponse)}}
+                onError={() => {console.log('Login Failed')}}
+/>; */}
         </div>
     </div>
   );

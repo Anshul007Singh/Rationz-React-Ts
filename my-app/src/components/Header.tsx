@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { CartContext } from './helpers/CartContextData';
 import { useContext } from 'react';
 import Cart from './pages/Cart';
-import UserContextProvider from './helpers/UserInputContext';
 
-const Header:React.FC<{age:number}> = (props)=> {
+  const Header:React.FC<{isLogin:boolean, onLogout:any, loggedUserName:string}> = (props)=> {
 
   const cartContext =  useContext(CartContext);
 
-const totalCart = cartContext?.items.reduce((totalItem,item)=>{
-   return totalItem + item.quantity
-},0)
+  const logoutHandler = ()=>{
+    props.onLogout();
+  }
 
-const showCartHandler = ()=>{
-    // cartContext?.showCart();
-}
-const [openCart, setOpenCart] = useState(false)
+  const totalCart = cartContext?.items.reduce((totalItem,item)=>{
+    return totalItem + item.quantity
+  },0);
+
+  const [openCart, setOpenCart] = useState(false);
 
   const openCartHandler = () => {
     setOpenCart((openCart) => !openCart);
@@ -30,14 +29,16 @@ const [openCart, setOpenCart] = useState(false)
     <div className="">
           <nav className="navbar navbar-expand-lg bg-secondary">
                 <div className="container-fluid">
-                    <Link className="navbar-brand" to={'/'}>RationZ</Link>
+                    <h4 className="navbar-brand" >RationZ</h4>
+                    {props.isLogin &&
                     <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                        <div className="navbar-nav">
-                        </div>
+                    <h4 className='mt-2 ms-5 text-light'>Welcome {props.loggedUserName}</h4>
+                    <div className='' style={{marginLeft:780}}>
+                        <button onClick={openCartHandler} className=' btn btn-outline-light text-decoration-none text-dark fs-5 fw-bold mx-5'>Cart : {totalCart}</button>
+                        <button onClick={logoutHandler} className='btn btn-danger'>Logout</button>
                     </div>
-                    <div className='dropdown'>
-                    <button onClick={openCartHandler} className='float-end btn btn-outline-light text-decoration-none text-dark fs-5 fw-bold mx-5'>Cart : {totalCart}</button>
                     </div>
+                    }
                 </div>
           </nav> 
           {openCart ? <Cart onClose = {closeCartHandler}/> : ''}
